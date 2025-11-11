@@ -14,7 +14,7 @@ app.use(express.json()); // for parsing application/json
 app.use(cors()); // enable CORS for all routes which allows cross-origin requests
 app.use('/api', router); // use the imported router for API routes will be prefixed with /api
 
-// what will the default route do!
+// what will the default will do which is http://127.0.0.1:3000/
 app.get('/', (_req, res) => {
   res.type('text').send('API is up');
 });

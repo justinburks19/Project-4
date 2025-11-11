@@ -4,8 +4,11 @@ import svc from '../services/tasks.service.js';
 console.log('svc keys:', Object.keys(svc));
 // GET /api/tasks
 export const getAllTasks = async (_req, res) => {
+try{
   const tasks = await svc.getAllTasks();
   res.json(tasks ?? []);
+  console.log('Retrieved tasks was successful' + (tasks ? `(${tasks.length} tasks)` : '(no tasks)'));
+}
 };
 
 // POST /api/tasks

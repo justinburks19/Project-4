@@ -17,6 +17,7 @@ const getAllTasks = async () => {
 };
 
 // Create a new task
+// activatedd by POST /api/tasks
 const createTask = async (taskData) => {
     
     const newTask = { id: idCounter++, ...taskData }; // assign a new ID and then make a copy of all properties from taskData
@@ -25,6 +26,7 @@ const createTask = async (taskData) => {
 };
 
 // Get a task by ID
+// activated by GET /api/tasks/:id
 const getTaskById = async (id) => {
     const task = parseInt(id, 10); // convert id to integer, base of 10
     if (Number.isNaN(task)) return null; // if Number as in not a number, return null
@@ -32,6 +34,8 @@ const getTaskById = async (id) => {
 };
 
 // Update/ Replace a task by ID
+// activated by PUT /api/tasks/:id
+// we can also display the new update task after updating
 const updateTaskById = async (id, taskData = {}) => {
     const taskID = parseInt(id, 10); // convert id to integer, base of 10
     if (Number.isNaN(taskID)) return null; // if Number as in not a number, return null
@@ -39,11 +43,12 @@ const updateTaskById = async (id, taskData = {}) => {
     if (index < 0 ) return null; // if not found, return null
     const updatedTask = { id: taskID, ...taskData }; // create the updated task object
     storage[index] = updatedTask; // replace the task in storage
-    return updatedTask;
+    return updatedTask; // return the updated task
 
 };
 
 // Delete a task by ID. we can also return the deleted task if needed
+// activated by DELETE /api/tasks/:id
 const deleteTaskById = async (id) => {
     const taskID = parseInt(id, 10); // convert id to integer, base of 10
     if (Number.isNaN(taskID)) return false; // if Number as in not a number, return false
