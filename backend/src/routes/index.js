@@ -1,15 +1,12 @@
-//step 3, create the router to handle different routes
+// step 3, create the router to handle different routes
 import { Router } from 'express';
-import {tasksRouter} from './tasks.js';
+import {tasksRouter} from './tasks.routes.js';   // <-- add this
 
-const router = Router();
+export const router = Router();
 
-// Mount the tasks router on the /tasks path
+// /api/health
+router.get('/health', (_req, res) => res.status(200).json({ status: 'OK' }));
+
+// /api/tasks/*
 router.use('/tasks', tasksRouter);
 
-//lets have the option to add more routes in the future
-router.get('/health', (req, res) => {
-  res.status(200).json({ status: 'OK' });
-});
-
-export default router;

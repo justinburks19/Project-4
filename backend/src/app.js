@@ -2,17 +2,24 @@
 //this will run the express app on the server 
 
 import express from 'express';
-import router from './routes';
-import notFound from './middlewares/notFound.js';
-import errorHandler from './middlewares/errorHandler.js';
-
+import {router} from './routes/index.js';
+import {notFound} from './middlewares/notfound.js';
+import {errorHandle} from './middlewares/errorHandle.js';
+import cors from 'cors';
 // Initialize Express app
 const app = express();
 
 // Use middleware
 app.use(express.json()); // for parsing application/json
+app.use(cors()); // enable CORS for all routes which allows cross-origin requests
 app.use('/api', router); // use the imported router for API routes will be prefixed with /api
+
+// what will the default route do!
+app.get('/', (_req, res) => {
+  res.type('text').send('API is up');
+});
+
 app.use(notFound); // handle 404 errors
-app.use(errorHandler); // handle other errors
+app.use(errorHandle); // handle other errors
 
 export default app;
