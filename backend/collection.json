@@ -12,7 +12,7 @@
   
   "item": [
     {
-      "name": "Health",
+      "name": "Serever Health Check",
       "request": {
         "method": "GET",
         "url": "{{baseUrl}}/api/health"
