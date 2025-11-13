@@ -1,6 +1,7 @@
 // src/services/tasks.service.js
 // where to put the business logic, know how to catch/save/ update!
 //step 6, implement the business logic for each CRUD operation
+import { type } from 'node:os';
 import storage from '../../data/info.js';
 import { randomUUID } from 'node:crypto'; // for generating unique IDs
 // in-memory storage for tasks
@@ -41,13 +42,31 @@ const set = ({ playercard, desc, age, active } = {}) => { //set the array of obj
     //active validation
     if (active !== undefined) {
         //can send true, false, "true", "false", 1, 0, "1", "0"
-        task.active = Boolean(active); // lets say active can be TOR. However we convert it to boolean but 
+        //We can handle numbers and strings for boolean values?
+        //Boolean check ✅
+        //Number check ✅
+        if (typeof active === 'boolean') {//stricly boolean (true/false)
+            task.active = active; // assign boolean active to task object
+        } 
+        //handle strings
+        else if (typeof active === 'string') {
+            const lower = active.toLowerCase(); // convert string to lowercase
+            if (lower === 'true' || lower === '1' || lower === 'yes' || lower === 'on') {
+                task.active = true;
+            } else if (lower === 'false' || lower === '0' || lower === 'no' || lower === 'off') {
+                task.active = false;
+            }
+        }
+        //handle numbers
+        else if (typeof active === 'number') {
+                task.active = active === 1; //  only if active is 1, set to true, else false. 0 === 1 false, 2 === 1 false 1 === 1 true
+            }
     }
 
     return task; // return the new task object with only the allowed properties
 };
 
-const body = set(req.body); // use the set function to filter the request body
+//const body = set(req.body); // use the set function to filter the request body
 
 // Create a new task
 // activatedd by POST /api/tasks
@@ -99,6 +118,15 @@ const updateTaskById = async (id, taskData = {}) => {
     */ // updated to use randomUUID which is a string
     if (typeof id !== 'string' || id.trim() === '') return null; // if id is not a string or is empty, return null
     
+    const key = id.trim(); // trim any extra spaces from the id
+    if (!key) return null; // if key is empty after trimming, return null
+
+    const index = storage.findIndex(item => item.id === key); // find the index of the task with the matching ID
+    if (index < 0 ) return null; // if not found, return null
+
+    const updatedTask = { id: key, ...set(taskData) }; // create the updated task object with only the allowed properties
+    storage[index] = updatedTask; // replace the task in storage
+    return updatedTask; // return the updated task
 
 };
 
