@@ -1,4 +1,5 @@
 // controllers/tasks.controller.js
+// traffic cop, for formating requests and responses
 import svc from '../services/tasks.service.js'; //svc is an object with methods for task operations
 
 console.log('svc keys:', Object.keys(svc)); // return an array of object keys
@@ -19,15 +20,19 @@ export const getAllTasks = async (request, respond) => {
 };
 
 // POST /api/tasks
-//curl -X POST http://localhost:3000/api/tasks -H "Content-Type: application/json" -d '{"title":"tennis","completed":false,"description":"tennis match on Friday"}'
-export const createTask = async (request, respond) => {
-  //focus on input validation for information coming from the client
+//curl -X POST http://localhost:3000/api/tasks -H "Content-Type: application/json" -d '{"playercard":"new player","desc":"new description","age":29,"active":true}'
+export const createTask = async (request, respond, next) => {
+  //focus on input validation for input data
   try {
-    const created = await svc.createTask(request.body); // create a new task with the request body data which contains title, completed, description
-    console.log('Created task:', created); // Log the created task
+    const created = await svc.createTask(request.body); // create a new task with the request body data which contains playercard, desc, age, active
+    console.log('Created task: successful', created); // Log the created task
+    return respond.status(201).json(created.id); // return the created task with 201 status code
   } catch (error) {
-    console.error('Error creating task: 400', error);
-    return respond.status(400).json({ error: 'Bad Request' });
+    if (error.name === 'ValidationError') {
+      console.error('Validation Error creating task:', error);
+      return respond.status(400).json({ error: error.message }); // return 400 Bad Request for validation errors
+    }
+    return next(error); // pass other errors to the error handling middleware will send 500 Internal Server Error
   }
 };
 
