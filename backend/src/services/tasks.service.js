@@ -123,8 +123,8 @@ const updateTaskById = async (id, taskData = {}) => {
 
     const index = storage.findIndex(item => item.id === key); // find the index of the task with the matching ID
     if (index < 0 ) return null; // if not found, return null
-
-    const updatedTask = { id: key, ...set(taskData) }; // create the updated task object with only the allowed properties
+    const originalTask = storage[index]; // get the original task
+    const updatedTask = {...originalTask,id: key, ...set(taskData), updatedAt: new Date().toISOString() }; // create the updated task object with only the allowed properties
     storage[index] = updatedTask; // replace the task in storage
     return updatedTask; // return the updated task
 
@@ -133,8 +133,8 @@ const updateTaskById = async (id, taskData = {}) => {
 // Delete a task by ID. we can also return the deleted task if needed
 // activated by DELETE /api/tasks/:id
 const deleteTaskById = async (id) => {
-    const taskID = parseInt(id, 10); // convert id to integer, base of 10
-    if (Number.isNaN(taskID)) return false; // if Number as in not a number, return false
+    const taskID = id.trim(); // trim any extra spaces from the id
+    if (typeof taskID !== 'string' || taskID === '') return false; // if taskID is not a string or is empty, return false
     const index = storage.findIndex(t => t.id === taskID); // find the index of the task with the matching ID
 
     if (index < 0 ) return false; // if not found, return false

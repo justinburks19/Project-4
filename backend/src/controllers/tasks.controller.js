@@ -44,16 +44,18 @@ export const getTaskById = async (request, respond) => {
 };
 
 // PUT /api/tasks/:id  (replace)
+// curl -X PUT http://localhost:3000/api/tasks/<uuid value> -H "Content-Type: application/json" -d '{"playercard":"updated player","desc":"updated description","age":35,"active":false}'
 export const updateTaskById = async (request, respond) => {
   const exists = await svc.getTaskById(request.params.id);
   if (!exists) return respond.status(404).json({ error: 'Task not found' });
 
   const updated = await svc.updateTaskById(request.params.id, request.body);
-  if (!updated) return respond.status(400).json({ error: 'Invalid body (title required)' });
+  if (!updated) return respond.status(400).json({ error: 'Invalid body (playerCard required, desc required, age required, active required)' });
   respond.json(updated);
 };
 
 // DELETE /api/tasks/:id
+// curl -X DELETE http://localhost:3000/api/tasks/<uuid value>
 export const deleteTaskById = async (request, respond) => {
   const removed = await svc.deleteTaskById(request.params.id);
   if (!removed) return respond.status(404).json({ error: 'Task not found' });
