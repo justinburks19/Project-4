@@ -3,7 +3,7 @@
 
 import express from 'express';
 import {router} from './routes/index.js';
-import {notFound} from './middlewares/notfound.js';
+import {notFound} from './middlewares/notFound.js';
 import {errorHandle} from './middlewares/errorHandle.js';
 import cors from 'cors';
 // Initialize Express app
@@ -13,6 +13,7 @@ const app = express();
 app.use(express.json()); // for parsing application/json
 app.use(cors()); // enable CORS for all routes which allows cross-origin requests
 app.use('/api', router); // use the imported router for API routes will be prefixed with /api
+app.use('/api/tasks', router); // use the tasks router for /api/tasks routes
 
 // what will the default will do which is http://127.0.0.1:3000/
 app.get('/', (_req, res) => {
