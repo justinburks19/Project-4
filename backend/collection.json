@@ -4,7 +4,7 @@
     "description": "CRUD collection points",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
-
+  
   "variable": [
     { "key": "baseUrl", "value": "http://127.0.0.1:3000" },
     { "key": "taskId", "value": "1" }
@@ -59,7 +59,7 @@
         "header": [{ "key": "Content-Type", "value": "application/json" }],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"playerCard\": \"New playerCard \",\n  \"desc\": \"New description\",\n  \"age\": 0,\n  \"active\": true\n}"
+          "raw": "{\n  \"playerCard\": \"New playerCard \",\n  \"desc\": \"New description\",\n  \"age\": \" \"\n}"
         },
         "url": "{{baseUrl}}/api/tasks"
       },
@@ -109,7 +109,7 @@
         "header": [{ "key": "Content-Type", "value": "application/json" }],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"title\": \"Updated via Postman\",\n  \"completed\": true,\n  \"description\": \"done\"\n}"
+          "raw": "{\n  \"playerCard\": \"New playerCard \",\n  \"desc\": \"New description\",\n  \"age\": \" \"\n, \"active\": false\n}"
         },
         "url": "{{baseUrl}}/api/tasks/{{taskId}}"
       },
